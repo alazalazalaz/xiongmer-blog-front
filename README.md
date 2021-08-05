@@ -1,2 +1,2 @@
 # xiongmaoer-blog-front
-simple blog, knowledge framework.
+a simple blog, knowledge framework.
