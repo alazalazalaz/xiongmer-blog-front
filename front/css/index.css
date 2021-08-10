@@ -9,40 +9,54 @@ li{
 }
 
 .banner{
+    z-index: 999;
     width: 100%;
     height: 60px;
+    position: fixed;
     border-bottom: darkgrey solid 0.5px;
 }
 
 .banner>.logo{
-    width: 20%;
+    width: 200px;
     height: 60px;
-    position: absolute;
+    position: relative;
     background-color: #FFBBBB;
     text-align: center;
     line-height: 60px;
 }
 
 .banner>.nav{
-    margin-left: 20%;
     height: 100%;
+    position: relative;
+    left: 200px;
+    top: -60px;
     background-color: darkgreen;
 }
 
 .banner>.nav>.search{
-    position: absolute;
-    width: 200px;
+    position: relative;
+    width: 15%;
     height: 60px;
     background-color: #1D336A;
 }
 
-.banner>.nav>ul{
+.banner>.nav>.menu{
+    top: -60px;
+    right: 200px;
+    width: auto;
+    height: 100%;
+    position: relative;
     float: right;
     background-color: aqua;
 }
 
-.banner>.nav>ul>li{
-    float: left;
+.banner>.nav>.menu>.item{
+    position: relative;
+    display: inline-block;
+    width: auto;
+    height: auto;
+    padding: 19px 10px;
+    background-color: antiquewhite;
 }
 
 .under_banner{
@@ -50,40 +64,43 @@ li{
     height: auto;
     min-height: 240px;
     border-color: #e6e4e4;
-    border-style: groove;
 }
 
 /*menu*/
 .menu{
-    position: absolute;
-    padding: 0px;
-    margin: 0px;
-    width: 20%;
+    width: 200px;
+    top: 60px;
+    position: fixed;
 }
-.menu > ul{
+.menu > .section{
     padding: 0px;
     margin: 0px;
     color: #C6B4B4;
     background-color: #121F3E;
     cursor: pointer;
 }
-.menu > ul > li{
-    width: 100%;
-    height: 60px;
-    text-align: center;
-    line-height: 60px;
+.menu>.section>.section_header{
+    font-size: x-large;
+    padding-top: 11px;
 }
-.menu > ul > .active{
+.menu > .section > .item{
+    width: 100%;
+    height: auto;
+    min-height: 23px;
+    text-align: center;
+    overflow: inherit;
+    padding: 1px 0px;
+}
+.menu > .section > .active{
     color:#ffffff;
     background-color: #1D336A;
 }
 
 /*right*/
 .right{
-    margin-left: 20%;
-    height: auto;
-    /*border-color: green;*/
-    /*border-style: solid;*/
+    position: absolute;
+    left: 200px;
+    top: 60px;
     background-color: #F5F5FA;
 }
 .wrap{
