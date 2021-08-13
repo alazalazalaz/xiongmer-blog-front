@@ -1,0 +1,24 @@
+{
+  "name": "xiongmer-blog-front",
+  "version": "1.0.0",
+  "description": "xiongMerBlog",
+  "main": "index.js",
+  "scripts": {
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alazalazalaz/xiongmer-blog-front.git"
+  },
+  "author": "allen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alazalazalaz/xiongmer-blog-front/issues"
+  },
+  "homepage": "https://github.com/alazalazalaz/xiongmer-blog-front#readme",
+  "devDependencies": {
+    "vuepress": "^1.8.2"
+  }
+}
