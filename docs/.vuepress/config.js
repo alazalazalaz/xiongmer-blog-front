@@ -13,16 +13,44 @@ module.exports = {
       },
       {text: 'Mysql', items: [
           {text: '基础知识', link: '/knowledge/mysql/base/data_type.html'},
-          {text: '数据结构', link: '/knowledge/mysql/data_struct/data_struct.html'}
         ]
       }
-
     ],
 
     //侧边栏
-    sidebar: [
-        ['/knowledge/mysql/base/data_type.md', 'mysql基础知识'],
-        ['/knowledge/mysql/data_struct/data_struct.md', '数据结构']
-    ]
+    sidebar: {
+      '/knowledge/golang/': [
+        {
+          title: "Golang基础知识",
+          path: '',
+          collapsable: false,
+          sidebarDepth: 0,
+          children: [
+            ['base/hello_world.md', '基础知识'],
+            ['base/data_struct.md', '数据结构']
+          ]
+        },
+        {
+          title: "Golang进阶知识",
+          path: '',
+          collapsable: false,
+          sidebarDepth: 0,
+          children: [
+            ['base/hello_world.md', 'TODO'],
+          ]
+        }
+      ],
+      '/knowledge/mysql/': [
+        {
+          title: "Mysql基础知识",
+          path: '',
+          collapsable: false,
+          sidebarDepth: 0,
+          children: [
+            ['base/data_type.md', '数据类型'],
+          ]
+        }
+      ]
+    }
   }
 }
