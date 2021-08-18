@@ -12,7 +12,25 @@ golang支持不同字节数的整形。
 |int|8字节|-2^64~2^64-1|
 
 ### 浮点数
-test
+
+golang和其他语言一样，依旧存在浮点数精度丢失的问题。
+
+精度丢失的原因在于：二进制无法精确表示十进制的小数，比如1/3=0.33333...，二进制只能采用一个近似值来表示。在用二进制和十进制之间转换的时候肯定就会出现精度丢失的情况。
+
+精度丢失的解决：使用`decimal`包
+
+```Go
+import (
+	"github.com/shopspring/decimal"
+	"log"
+)
+
+var num1 = 19.9
+log.Println(num1 * 100) //等于1989.9999999999998
+//采用decimal包解决
+re, _ := decimal.NewFromFloat(num1).Mul(decimal.NewFromInt(100)).Float64()
+log.Println(re)
+```
 
 ### 字符
 
