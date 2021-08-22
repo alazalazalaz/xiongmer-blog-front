@@ -34,5 +34,55 @@ log.Println(re)
 
 ### 字符
 
+让我们先来回顾一下`ASCII`，`unicode`，`utf-8`这几个概念。
+
+
+
+
+在golang中，字符的本质是一个int8的整数，也就是byte这个类型。这个整数表示的是这个字符对应的ASCII字符。范围为-2^7~2^7-1(-256~255)。
+
+
+定义一个字符
+```Go
+var c byte = 'a'
+```
+
+输出一个字符，会直接输出它对应的ASCII码
+```Go
+log.Println(c)//97
+```
+
+格式化输出字符，才会输出它对应的值
+```Go
+log.Printf("%c", 169)//a
+```
+
+一个byte是int8，只有一个字节大小，如果用中文(3/4个字节)会溢出，编译失败
+```Go
+var z byte = '中'//constant 20013 overflows byte
+```
+
+可以用一个int32或者int64来存放单个中文汉字，然后格式化输出
+```Go
+var zh int = '中'//注意是单引号哦，表示单个字符
+log.Printf("%c", zh)//中
+```
 
 ### 字符串
+
+字符串是由字符组成的数组，string之于byte类似c中的字符串char[]之于char。
+
+但是，go中的字符串是由一个结构体构成的，源码定义如下：
+
+```Go
+type StringHeader struct {
+	Data uintptr
+	Len  int
+}
+```
+
+是不是让人想起了redis的string底层数据结构之SDS。
+
+其中`Len`字段表示字符串长度，`Data`字段是一个指针，指向的具体字符数组的第一个元素，原型图如下：
+
+![img.png](../assets/string_in_memory.png)
