@@ -42,7 +42,7 @@ unicode当前默认的版本是`UCS-2`也就是用定长2个字节来表示字�
 
 UTF-8的规则很简单，就是使用控制码+字符码组成，控制码就是告诉计算机当前是单字节还是多字节，字符码就是对应的`unicode`。
 
-规则1：对于单字节的字符，8个bit位中高位必须以`0`开头，这完全等同于127位最初的`ASCII`码。比如大写字母`A`，对于的二进制为`01000001`
+规则1：对于单字节的字符，8个bit位中高位必须等于`0`，这完全等同于127位最初的`ASCII`码。比如大写字母`A`，对于的二进制为`01000001`
 
 规则2：对于需要n个字节的字符：
 
@@ -52,17 +52,17 @@ UTF-8的规则很简单，就是使用控制码+字符码组成，控制码就�
     - 第n+1位为`0`
 - 其他字节：
     - 高位以`10`开头
-- 未提及的位使用对应的unicode补充，不足的用高位0补充
+- 未提及的位使用对应的unicode补充，不足的在高位用0补充
 ```
 
 unicode和utf-8的映射关系如下：
 
-|unicode的符号范围(十六进制)|utf-8的编码方式(二进制)|
-|---|---|
-|0000 0000 ~ 0000 007F | 0xxxxxxx|
-|0000 0080 ~ 0000 07FF | 110xxxxx 10xxxxxx|
-|0000 0800 ~ 0000 FFFF | 1110xxxx 10xxxxxx 10xxxxxx|
-|0001 0000 ~ 0010 FFFF | 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx|
+|unicode的符号范围(十六进制)|utf-8的编码方式(二进制)|说明|
+|---|---|---|
+|0000 0000 ~ 0000 007F | 0xxxxxxx|完全兼容ASCII|
+|0000 0080 ~ 0000 07FF | 110xxxxx 10xxxxxx|110表示需要两个字节(当前字节和随后的一个字节)表示当前字符，<br>x为字符的unicode二进制</br>|
+|0000 0800 ~ 0000 FFFF | 1110xxxx 10xxxxxx 10xxxxxx|1110表示需要三个字节。。。同上|
+|0001 0000 ~ 0010 FFFF | 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx|表示需要四个字节。。。同上|
 
 #### 举例1-ASCII
 
@@ -83,11 +83,20 @@ log.Printf("bytes:%v, rune:%v", []byte(yi), []rune(yi))//bytes:[228 184 128], ru
 
 ### UTF-16、UTF-32等
 
-### GB2312、GBK等其他编码
+上面介绍了文字字符映射为unicode符号，并且由utf-8来实现编码(如何读取unicode符号)。其中不止utf-8还有其他编码方式，比如utf-16,utf-32等。
 
+这里简单介绍下这几种编码方式的区别。
+
+
+### GB2312、GBK等其他编码
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
 ### 引用
 
 ascii wiki[https://zh.wikipedia.org/wiki/ASCII](https://zh.wikipedia.org/wiki/ASCII)
 
 汉字编码表[http://www.chi2ko.com/tool/CJK.htm](http://www.chi2ko.com/tool/CJK.htm)
+
+字符编码笔记[https://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html](https://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html)
