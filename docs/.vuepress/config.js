@@ -76,7 +76,7 @@ function getLinuxSlider(){
       collapsable: false,
       sidebarDepth: 0,
       children: [
-        ['base/coding.md', '编码原理'],
+        ['base/coding.md', '编码规则'],
       ]
     }
   ]
