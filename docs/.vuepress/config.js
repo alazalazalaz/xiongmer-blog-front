@@ -7,12 +7,11 @@ module.exports = {
     nav: [
       {text: 'Home', link: '/'},
       {text: 'Golang', items: [
-          {text: '基础知识', link: '/knowledge/golang/base/hello_world.html'},
-          {text: '数据结构', link: '/knowledge/golang/base/data_struct.html'}
+          {text: 'Golang基础知识', link: '/knowledge/golang/base/base_struct.html'}
         ]
       },
       {text: 'Mysql', items: [
-          {text: '基础知识', link: '/knowledge/mysql/base/data_type.html'},
+          {text: 'Mysql基础知识', link: '/knowledge/mysql/base/data_type.html'},
         ]
       },
       {text: 'Linux', items: [
@@ -38,8 +37,8 @@ function getGolangSlider(){
       collapsable: false,
       sidebarDepth: 0,
       children: [
-        ['base/hello_world.md', '基础知识'],
-        ['base/data_struct.md', '数据结构']
+        ['base/base_struct.md', '基本类型'],
+        ['base/normal_struct.md', 'slice、map、channel']
       ]
     },
     {
@@ -48,7 +47,7 @@ function getGolangSlider(){
       collapsable: false,
       sidebarDepth: 0,
       children: [
-        ['base/hello_world.md', 'TODO'],
+        ['', 'TODO'],
       ]
     }
   ]
