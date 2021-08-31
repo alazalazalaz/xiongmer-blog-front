@@ -1,7 +1,12 @@
 module.exports = {
   title: '熊Mer的知识库',
   description: 'golang/mysql/redis/kafka',
-
+  head: [
+      [
+          'link',
+        {rel: 'icon', href: 'tv.ico'}
+      ]
+  ],
   themeConfig: {
     // 导航栏
     nav: [
