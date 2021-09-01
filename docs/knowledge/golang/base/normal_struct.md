@@ -1,8 +1,8 @@
-## 常用结构
+# 常用结构
 
-### slice
+## slice
 
-#### 什么是切片
+### 什么是切片
 
 切片是一个24byte的结构体，源码`reflect/value.go`中的定义如下：
 
@@ -24,7 +24,7 @@ type SliceHeader struct {
 
 ![img.png](../assets/slice.png)
 
-#### 定义切片
+### 定义切片
 
 1. make定义
 ```Go
@@ -42,7 +42,7 @@ var array = [4]int {1, 2, 3, 4}
 s1 := array[:] //所有
 ```
 
-#### 切片的赋值和传递
+### 切片的赋值和传递
 
 赋值和传递都只会拷贝切片结构体，引用的数据会共享。
 ```Go
@@ -64,7 +64,7 @@ func changeSliceX(sliceX []int){
 }
 ```
 
-#### 切片拷贝&追加
+### 切片拷贝&追加
 ```Go
 var slice []int
 slice1 := make([]int, len(slice), cap(slice) * 2)//拷贝会深拷贝
@@ -73,7 +73,7 @@ copy(slice1, slice)
 slice = append(slice, 5, 100, 7)//追加会自动扩容
 ```
 
-#### 切片的删除和常用函数
+### 切片的删除和常用函数
 
 删除第n个元素(len(slice))>=n>=1)
 ```Go
@@ -88,5 +88,102 @@ sliceZ := [...]int{1, 2, 3, 4}
 for i, s := range sliceZ{
     fmt.Printf("i=>s , %d=> %d\n", i, s)
 }
+```
+
+## map
+
+### 什么是map
+
+map是指针，指向`hmap`结构体的指针。它和切片类似，在赋值或者传递的时候，只会发生指针的拷贝，引用的值未发生拷贝。
+
+看看源码`runtime/map.go`对map的创建
+
+```Go
+func makemap(t *maptype, hint int, h *hmap) *hmap {
+	mem, overflow := math.MulUintptr(uintptr(hint), t.bucket.size)
+	if overflow || mem > maxAlloc {
+		hint = 0
+	}
+	...
+	...
+```
+
+以及`hmap`结构体
+```
+// A header for a Go map.
+type hmap struct {
+	// Note: the format of the hmap is also encoded in cmd/compile/internal/gc/reflect.go.
+	// Make sure this stays in sync with the compiler's definition.
+	count     int // # live cells == size of map.  Must be first (used by len() builtin)
+	flags     uint8
+	B         uint8  // log_2 of # of buckets (can hold up to loadFactor * 2^B items)
+	noverflow uint16 // approximate number of overflow buckets; see incrnoverflow for details
+	hash0     uint32 // hash seed
+
+	buckets    unsafe.Pointer // array of 2^B Buckets. may be nil if count==0.
+	oldbuckets unsafe.Pointer // previous bucket array of half the size, non-nil only when growing
+	nevacuate  uintptr        // progress counter for evacuation (buckets less than this have been evacuated)
+
+	extra *mapextra // optional fields
+}
+```
+
+**所以如果用`*map`的方式，相当于对指针再次使用指针，有点多此一举的感觉了**。
+
+但是为什么我们使用`reflect.TypeOf()`打印指针的时候没有`*`呢？
+
+```
+var mapZ map[int]int
+fmt.Println(reflect.TypeOf(mapZ)) # map[int]int
+fmt.Println(reflect.TypeOf(&user{})) # *main.user
+```
+
+以下摘抄[这里](https://groups.google.com/g/golang-nuts/c/SjuhSYDITm4/m/jnrp7rRxDQAJ)：
+
+```
+ In the very early days what we call maps now were written as pointers, so you wrote *map[int]int. 
+ We moved away from that when we realized that no one ever wrote `map` without writing `*map`. 
+ That simplified many things but it left this issue behind as a complication.
+```
+
+### 定义map
+
+```Go
+//定义方式1 使用map关键字，此方式未初始化，为nil map，不能用来存放键值对，会panic(assignment to entry in nil map)
+// var variable_name map[key_type]value_type
+
+//定义方式2 使用make函数，会被初始化
+// variable_name := make(map[key_type]value_type)
+
+var countryCapitalMap = make(map[string]string)
+
+countryCapitalMap["中国"] = "北京"
+countryCapitalMap["葡萄牙"] = "里斯本"
+countryCapitalMap["西班牙"] = "马德里"
+```
+
+### 遍历map
+
+和slice一样直接使用`range`，`range`放置1个参数表示key，如果放置2个参数表示key和value。
+
+**注意：遍历输出元素的顺序与填充顺序无关！！！**
+```Go
+for key := range countryCapitalMap{
+    fmt.Printf("key: %s, value: %s \n", key, countryCapitalMap[key])
+}
+
+for key, v := range countryCapitalMap{
+    fmt.Printf("key: %s, value: %s \n", key, v)
+}
+```
+
+### 判断元素是否存在于map中
+```Go
+value, isExist := countryCapitalMap["美国"]//isExist是bool值
+```
+
+### 删除map元素
+```Go
+delete(countryCapitalMap, "西班牙")
 ```
 
