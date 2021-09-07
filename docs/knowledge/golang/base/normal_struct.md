@@ -187,3 +187,51 @@ value, isExist := countryCapitalMap["美国"]//isExist是bool值
 delete(countryCapitalMap, "西班牙")
 ```
 
+### map的普通赋值
+
+```Go
+//普通赋值
+mapLeft, mapRight := make(map[int]int), make(map[int]int)
+mapLeft[1] = 1
+mapRight[2] = 2
+fmt.Printf("mapLeft=%v, mapLeft's *hmap=%p, mapLeft address=%p\n", mapLeft, mapLeft, &mapLeft)
+fmt.Printf("mapRight=%v, mapRight's *hmap=%p, mapRight address=%p\n", mapRight, mapRight, &mapRight)
+mapLeft = mapRight
+fmt.Printf("mapLeft=%v, mapLeft's *hmap=%p, mapLeft address=%p\n", mapLeft, mapLeft, &mapLeft)
+```
+输出：
+```shell
+mapLeft=map[1:1], mapLeft's *hmap=0xc000098210, mapLeft address=0xc0000b4020
+mapRight=map[2:2], mapRight's *hmap=0xc000098240, mapRight address=0xc0000b4028
+mapLeft=map[2:2], mapLeft's *hmap=0xc000098240, mapLeft address=0xc0000b4020
+```
+说明赋值后，mapLeft和mapRight都指向`0xc000098240,`这块内存*hmap空间。所以修改mapLeft和mapRight都会相互影响。
+
+### map的方法传递
+
+```Go
+var mapUninit map[int]int
+mapInited := make(map[int]int)
+mapInited[1] = 1
+fmt.Printf("mapUninit=%v, mapUninit's *hmap=%p, mapUninit address=%p\n", mapUninit, mapUninit, &mapUninit)
+fmt.Printf("mapInited=%v, mapInited's *hmap=%p, mapInited address=%p\n", mapInited, mapInited, &mapInited)
+_referenceMap(mapUninit, mapInited)
+
+func _referenceMap(mapUninit map[int]int, mapInited map[int]int){
+	fmt.Printf("in func mapUninit=%v, mapUninit's *hmap=%p, mapUninit address=%p\n", mapUninit, mapUninit, &mapUninit)
+	fmt.Printf("in func mapInited=%v, mapInited's *hmap=%p, mapInited address=%p\n", mapInited, mapInited, &mapInited)
+}
+```
+
+输出：
+```shell
+mapUninit=map[], mapUninit's *hmap=0x0, mapUninit address=0xc00000e040
+mapInited=map[1:1], mapInited's *hmap=0xc000068300, mapInited address=0xc00000e048
+in func mapUninit=map[], mapUninit's *hmap=0x0, mapUninit address=0xc00000e050
+in func mapInited=map[1:1], mapInited's *hmap=0xc000068300, mapInited address=0xc00000e058
+```
+
+结论：
+使用var声明的map是未被初始化的，也就是*hmap指针是空的，直接使用该变量赋值比如`mapUninit[1]=1`会panic。
+
+map传递是值拷贝，实参`0xc00000e040`传递进来后，新拷贝了一个变量`0xc00000e048`，但是这两个变量的值也就是*hmap都是共享的同一个地址。所以函数内外修改都会相互影响实参。
