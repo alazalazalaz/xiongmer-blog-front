@@ -235,3 +235,62 @@ in func mapInited=map[1:1], mapInited's *hmap=0xc000068300, mapInited address=0x
 使用var声明的map是未被初始化的，也就是*hmap指针是空的，直接使用该变量赋值比如`mapUninit[1]=1`会panic。
 
 map传递是值拷贝，实参`0xc00000e040`传递进来后，新拷贝了一个变量`0xc00000e048`，但是这两个变量的值也就是*hmap都是共享的同一个地址。所以函数内外修改都会相互影响实参。
+
+## chan
+
+### 什么是chan
+
+同理channel和map一样，也是一个指针，指向的是runtime/chan.go中的hchan结构体。
+
+```Go
+func makechan(t *chantype, size int) *hchan {
+    ...
+}
+
+type hchan struct {
+	qcount   uint           // total data in the queue
+	dataqsiz uint           // size of the circular queue
+	buf      unsafe.Pointer // points to an array of dataqsiz elements
+	elemsize uint16
+	closed   uint32
+	elemtype *_type // element type
+	sendx    uint   // send index
+	recvx    uint   // receive index
+	recvq    waitq  // list of recv waiters
+	sendq    waitq  // list of send waiters
+	lock mutex
+}
+```
+
+### 创建一个no buffer的chan
+
+```Go
+func createNoBufferChan(){
+	c1 := make(chan int)
+
+	go func(c1 chan int) {//如果没有子协程去接受c1(也就是说如果没有这个goroutine)，那么主协程发送后会panic of deadlock
+		time.Sleep(time.Second * 2)
+		c1Result := <-c1
+		fmt.Println("createNoBufferChan 接受c1=", c1Result)
+	}(c1)
+
+	c1<-1	//因为是no buffer，所以发送的时候会阻塞，直到接收方准备好接收。
+	fmt.Println("createNoBufferChan 写入c1完成")
+	time.Sleep(time.Second * 2)
+	fmt.Println("createNoBufferChan end")
+}
+```
+
+说明：
+
+使用make(chan type)创建的通道是无缓冲通道，也叫同步通道
+
+如果使用var c1 chan int创建，创建后由于该通道没有初始化，直接使用会报错，建议使用make创建
+
+无缓冲通道特点：
+
+1、因为没有buffer所以，发送后，对方goroutine必须立即接受，如果没有goroutine存在，则发送方会panic of deadlock
+
+### 创建一个有buffer的chan
+@todo 协程泄露问题，打印协程数
+
