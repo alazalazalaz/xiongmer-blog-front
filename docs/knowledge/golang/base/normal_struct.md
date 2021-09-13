@@ -236,11 +236,12 @@ in func mapInited=map[1:1], mapInited's *hmap=0xc000068300, mapInited address=0x
 
 map传递是值拷贝，实参`0xc00000e040`传递进来后，新拷贝了一个变量`0xc00000e048`，但是这两个变量的值也就是*hmap都是共享的同一个地址。所以函数内外修改都会相互影响实参。
 
-## chan
+## channel
 
-### 什么是chan
+### 什么是channel
+channel是一个特殊类型，遵循FIFO的规则的队列。用于不同groutine之间传递信息。
 
-同理channel和map一样，也是一个指针，指向的是runtime/chan.go中的hchan结构体。
+channel和map同理，也是一个指针，指向的是runtime/chan.go中的hchan结构体。
 
 ```Go
 func makechan(t *chantype, size int) *hchan {
@@ -262,7 +263,9 @@ type hchan struct {
 }
 ```
 
-### 创建一个no buffer的chan
+channel的操作分为三个，分别是发送、接收和关闭。发送和接收都使用`<-`符号，关闭使用`close()`函数。
+
+### 创建一个no buffer的channel
 
 ```Go
 func createNoBufferChan(){
@@ -279,6 +282,15 @@ func createNoBufferChan(){
 	time.Sleep(time.Second * 2)
 	fmt.Println("createNoBufferChan end")
 }
+
+输出：
+createNoBufferChan 接受c1= 1
+createNoBufferChan 写入c1完成
+createNoBufferChan end
+或者
+createNoBufferChan 写入c1完成
+createNoBufferChan 接受c1= 1
+createNoBufferChan end
 ```
 
 说明：
@@ -289,8 +301,36 @@ func createNoBufferChan(){
 
 无缓冲通道特点：
 
-1、因为没有buffer所以，发送后，对方goroutine必须立即接受，如果没有goroutine存在，则发送方会panic of deadlock
+1、因为没有buffer所以，发送后，接收方goroutine必须立即接受，如果没有接收的goroutine存在，则发送方会panic of deadlock；如果接收方是阻塞状态，则发送方也会阻塞，直到接收方接收chan。
 
-### 创建一个有buffer的chan
+### 创建一个有buffer的channel
+```Go
+func createBufferChan(){
+	ch := make(chan int, 1)
+	ch<-1//这里主协程直接发送，就不会报错，因为会发送到缓冲里面去
+	//ch<-2//但是如果发送第二次，则会报错，因为缓冲大小只有一个
+	//go func(ch chan int) {
+	//	time.Sleep(time.Second*5)
+	//	fmt.Println(<-ch)
+	//
+	//}(ch)
+
+	//fmt.Println("createBufferChan", <-ch)
+	log.Println("end")
+}
+```
+
+### 接收
+
+从一个通道中接收值。
+```Go
+x := <-ch //从ch中取值并赋给x
+<-ch    //从ch中取值并忽略
+```
+
+### 关闭
+@todo
+
+
 @todo 协程泄露问题，打印协程数
 
