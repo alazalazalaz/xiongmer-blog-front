@@ -329,7 +329,29 @@ x := <-ch //从ch中取值并赋给x
 ```
 
 ### 关闭
-@todo
+
+使用`close`函数关闭
+```Go
+close(chan)
+```
+
+对已关闭的channel执行读、写、关闭操作会导致以下情况：
+- 再次读，如果里面还有内容会返回内容，如果没有内容会返回该类型的空值。
+- 再次写，会panic
+- 再次关闭，会panic
+
+但是，channel可以不用显示调用关闭，因为它会被回收，这一点和文件句柄不同。
+
+```Go
+ch := make(chan int, 1)
+ch<-1
+fmt.Println("closeChan", <-ch)
+close(ch)
+fmt.Println("read a closed chan", <-ch)//继续读取一个已关闭的chan，如果里面有值会返回值，返回完后继续读取会返回该类型的空值，此处返回0
+//ch<-2 // 继续往一个已关闭的chan写入，会导致panic
+//close(ch) // 再次关闭一个已关闭的chan会panic
+```
+
 
 
 @todo 协程泄露问题，打印协程数
