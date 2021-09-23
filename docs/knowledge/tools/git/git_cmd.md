@@ -304,8 +304,8 @@ $git push origin master
 
 ## 附录
 
-git命令查询：[https://www.bookstack.cn/read/git-tutorial/docs-operations.md](xx)
+git命令查询：[https://www.bookstack.cn/read/git-tutorial/docs-operations.md](https://www.bookstack.cn/read/git-tutorial/docs-operations.md)
 
-git官方文档：[https://git-scm.com/book/zh/v2/Git-%E5%88%86%E6%94%AF-%E5%8F%98%E5%9F%BA](.)
+git官方文档：[https://git-scm.com/book/zh/v2/Git-%E5%88%86%E6%94%AF-%E5%8F%98%E5%9F%BA](https://git-scm.com/book/zh/v2/Git-%E5%88%86%E6%94%AF-%E5%8F%98%E5%9F%BA)
 
-git菜鸟：[https://www.runoob.com/git/git-tutorial.html](.)
+git菜鸟：[https://www.runoob.com/git/git-tutorial.html](https://www.runoob.com/git/git-tutorial.html)
