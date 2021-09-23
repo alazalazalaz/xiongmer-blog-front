@@ -22,6 +22,10 @@ module.exports = {
       {text: 'Linux', items: [
           {text: '基础知识', link: '/knowledge/linux/base/coding.html'},
         ]
+      },
+      {text: 'Tools', items: [
+          {text: 'git', link: '/knowledge/tools/git/git_cmd.html'},
+        ]
       }
     ],
 
@@ -30,6 +34,7 @@ module.exports = {
       '/knowledge/golang/': getGolangSlider(),
       '/knowledge/mysql/': getMysqlSlider(),
       '/knowledge/linux/': getLinuxSlider(),
+      '/knowledge/tools/': getToolsSlider(),
     }
   }
 }
@@ -81,6 +86,20 @@ function getLinuxSlider(){
       sidebarDepth: 0,
       children: [
         ['base/coding.md', '编码规则'],
+      ]
+    }
+  ]
+}
+
+function getToolsSlider(){
+  return [
+    {
+      title: "工具箱",
+      path: '',
+      collapsable: false,
+      sidebarDepth: 0,
+      children: [
+        ['git/git_cmd.md', 'git命令'],
       ]
     }
   ]
