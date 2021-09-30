@@ -59,7 +59,16 @@ function getGolangSlider(){
       children: [
         ['', 'TODO'],
       ]
-    }
+    },
+    {
+      title: "gin",
+      path: '',
+      collapsable: false,
+      sidebarDepth: 0,
+      children: [
+        ['gin/route.md', 'gin-route']
+      ]
+    },
   ]
 }
 
