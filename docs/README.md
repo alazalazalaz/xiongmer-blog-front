@@ -4,7 +4,7 @@ heroImage: /image/1.jpeg
 heroText: Hero 标题
 tagline: Hero 副标题
 actionText: 进入知识库 →
-actionLink: /knowledge/golang/base/data_struct.html
+actionLink: /knowledge/golang/base/base_struct.html
 features:
 - title: 简洁至上
   details: 以 Markdown 为中心的项目结构，以最少的配置帮助你专注于写作。
@@ -15,4 +15,4 @@ features:
 footer: MIT Licensed | Copyright © 2021-熊merBlog
 ---
 
-# Hello Vue Press(docs/README.md) 
+# Hello Vue Press(docs/README.md)
